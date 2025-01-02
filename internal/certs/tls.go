@@ -46,18 +46,20 @@ func NewTLSTemplate() (*x509.Certificate, error) {
 	return &x509.Certificate{
 		SerialNumber: serialNumber,
 		Subject: pkix.Name{
-			Country:            []string{"CH"},
-			Organization:       []string{"Proton AG"},
-			OrganizationalUnit: []string{"Proton Mail"},
-			CommonName:         "127.0.0.1",
+			Country:            []string{"US"},
+			Organization:       []string{"Restoration Security Consultants"},
+			OrganizationalUnit: []string{"RSC Bridge"},
+			// CommonName:         "127.0.0.1",
+			CommonName: "greenbridge.restoration-mt.com",
 		},
 		KeyUsage:              x509.KeyUsageKeyEncipherment | x509.KeyUsageDigitalSignature | x509.KeyUsageCertSign,
 		ExtKeyUsage:           []x509.ExtKeyUsage{x509.ExtKeyUsageServerAuth, x509.ExtKeyUsageClientAuth},
 		BasicConstraintsValid: true,
 		IsCA:                  true,
-		IPAddresses:           []net.IP{net.ParseIP("127.0.0.1")},
-		NotBefore:             time.Now(),
-		NotAfter:              time.Now().Add(20 * 365 * 24 * time.Hour),
+		// IPAddresses:           []net.IP{net.ParseIP("127.0.0.1")},
+		IPAddresses: []net.IP{net.ParseIP("52.15.82.114")},
+		NotBefore:   time.Now(),
+		NotAfter:    time.Now().Add(20 * 365 * 24 * time.Hour),
 	}, nil
 }
 
@@ -110,9 +112,10 @@ func GetConfig(certPEM, keyPEM []byte) (*tls.Config, error) {
 	//nolint:gosec  // We need to support older TLS versions for AppleMail and Outlook
 	return &tls.Config{
 		Certificates: []tls.Certificate{c},
-		ServerName:   "127.0.0.1",
-		ClientAuth:   tls.VerifyClientCertIfGiven,
-		RootCAs:      caCertPool,
-		ClientCAs:    caCertPool,
+		// ServerName:   "127.0.0.1",
+		ServerName: "greenbridge.restoration-mt.com",
+		ClientAuth: tls.VerifyClientCertIfGiven,
+		RootCAs:    caCertPool,
+		ClientCAs:  caCertPool,
 	}, nil
 }
